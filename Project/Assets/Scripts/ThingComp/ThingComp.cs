@@ -4,7 +4,12 @@ using UnityEngine;
 
 public abstract class ThingComp
 {
+    public Thing Thing { get; private set; }
+
+    public ThingComp(Thing thing) => Thing = thing;
+
     // Lifecycle
+    public virtual void Update() { }
     public virtual void PreTick() { }
     public virtual void Tick() { }
     public virtual void PostTick() { }

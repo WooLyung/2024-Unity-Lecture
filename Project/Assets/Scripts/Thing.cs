@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public abstract class Thing : MonoBehaviour
@@ -10,12 +11,22 @@ public abstract class Thing : MonoBehaviour
 
     // Variables
     public abstract string Name { get; }
+    private Vector2Int pos;
+    public Vector2Int Pos {
+        get => pos;
+        set
+        {
+            ThingSystem.Instance.Move(pos, value);
+            pos = value;
+        }
+    }
 
     // Methods
-    public void AddComp(ThingComp comp)
+    public ThingComp AddComp(ThingComp comp)
     {
         comps.Add(comp);
         comp.OnAdded();
+        return comp;
     }
 
     public bool HasComp(Type clazz)
@@ -23,8 +34,19 @@ public abstract class Thing : MonoBehaviour
         return comps.Any(comp => comp.GetType() == clazz);
     }
 
+    public ThingComp GetComp(Type clazz)
+    {
+        return comps.Find(comp => comp.GetType() == clazz);
+    }
+
     // LifeCycle
     public virtual void OnInstantiate() { }
+
+    public virtual void OnUpdate()
+    {
+        foreach (ThingComp comp in comps)
+            comp.Update();
+    }
 
     public virtual void PreTick()
     {

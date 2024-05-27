@@ -4,4 +4,10 @@ using UnityEngine;
 
 public abstract class Entity : Thing
 {
+    public override void OnInstantiate()
+    {
+        base.OnInstantiate();
+
+        AddComp(new BehaviorComp(this));
+    }
 }

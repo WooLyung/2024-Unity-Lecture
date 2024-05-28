@@ -260,6 +260,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 5932739582109823042, guid: 7a6af4ae0a302bf4f8fc810fb2790c4d, type: 3}
+  wall: {fileID: 6502040318171966233, guid: 3905b8138ea643545a2404e6e7d9d870, type: 3}
+  pig: {fileID: 6497905179220718667, guid: 31568fb19ca17fe4488bc8b101e9f517, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

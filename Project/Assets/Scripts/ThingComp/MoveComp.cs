@@ -43,6 +43,9 @@ public class MoveComp : ThingComp
 
     public void Move(Vector2Int from, Vector2Int to)
     {
+        if (from == to || Thing.Pos != from || ThingSystem.Instance.FindThing(to) != null)
+            return;
+
         IsMoving = true;
         this.from = from;
         this.to = to;

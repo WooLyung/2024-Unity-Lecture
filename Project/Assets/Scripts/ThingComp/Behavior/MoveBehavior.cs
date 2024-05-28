@@ -16,12 +16,10 @@ public class MoveBehavior : Behavior
 
     public override void InitSteps()
     {
-        //List<Vector2Int> path;
-        //bool result = ThingSystem.Instance.PathFind(from, to, out path);
-        //if (result)
-        //{
-        //    foreach (Vector2Int tile in path)
-        //        Debug.Log(tile);
-        //}
+        steps = new();
+        List<Vector2Int> path;
+        if (ThingSystem.Instance.PathFind(from, to, out path))
+            for (int i = 0; i < path.Count - 1; i++)
+                steps.Add(new MoveStep(moveComp, path[i], path[i + 1]));
     }
 }

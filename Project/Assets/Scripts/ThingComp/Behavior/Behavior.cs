@@ -28,33 +28,37 @@ public abstract class Behavior
             CurStep = 0;
             Step step = steps[CurStep];
             step.OnStart();
-            if (step.IsFinished())
-            {
-                step.OnFinish();
-                return false;
-            }
-            else if (step.IsCanceled())
+
+            if (step.IsCanceled())
             {
                 step.OnCancel();
                 return false;
             }
-        }
-        else
-        {
-            Step step = steps[CurStep];
-            if (step.IsFinished())
+            else if (step.IsFinished())
             {
                 step.OnFinish();
                 CurStep++;
                 if (CurStep < steps.Count)
                     steps[CurStep].OnStart();
             }
-            else if (step.IsCanceled())
+        }
+        else
+        {
+            Step step = steps[CurStep];
+
+            if (step.IsCanceled())
             {
                 step.OnCancel();
                 CurStep = -1;
                 newSteps();
                 return true;
+            }
+            else if (step.IsFinished())
+            {
+                step.OnFinish();
+                CurStep++;
+                if (CurStep < steps.Count)
+                    steps[CurStep].OnStart();
             }
         }
 

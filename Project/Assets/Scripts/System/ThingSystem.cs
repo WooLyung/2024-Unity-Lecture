@@ -13,32 +13,9 @@ public class ThingSystem : MonoBehaviour
     private Dictionary<Vector2Int, Thing> map = new();
     private float tickTime = 0;
 
-    public GameObject player;
-    public GameObject wall;
-    public GameObject pig;
-
-    void Start()
+    public ThingSystem()
     {
         Instance = this;
-        InstantiateThing(player, Vector2Int.zero);
-        InstantiateThing(pig, new Vector2Int(-4, 0));
-        InstantiateThing(pig, new Vector2Int(-4, 1));
-        InstantiateThing(pig, new Vector2Int(-4, 2));
-        InstantiateThing(wall, new Vector2Int(3, 0));
-        InstantiateThing(wall, new Vector2Int(3, -1));
-        InstantiateThing(wall, new Vector2Int(3, 1));
-        InstantiateThing(wall, new Vector2Int(3, -2));
-        InstantiateThing(wall, new Vector2Int(3, 2));
-        InstantiateThing(wall, new Vector2Int(2, -2));
-        InstantiateThing(wall, new Vector2Int(1, -2));
-        InstantiateThing(wall, new Vector2Int(0, -2));
-        InstantiateThing(wall, new Vector2Int(-1, -2));
-        InstantiateThing(wall, new Vector2Int(-2, -2));
-        InstantiateThing(wall, new Vector2Int(1, 2));
-        InstantiateThing(wall, new Vector2Int(0, 2));
-        InstantiateThing(wall, new Vector2Int(-1, 2));
-        InstantiateThing(wall, new Vector2Int(-2, 2));
-        InstantiateThing(wall, new Vector2Int(2, 2));
     }
 
     void Update()
@@ -114,7 +91,10 @@ public class ThingSystem : MonoBehaviour
             map.Remove(map.First(pair => pair.Value == thing).Key);
         }
         foreach (Thing thing in delThings)
+        {
             thing.OnFinish();
+            Destroy(thing.gameObject);
+        }
         delThings.Clear();
     }
 
@@ -127,6 +107,7 @@ public class ThingSystem : MonoBehaviour
     // LifeCycle
     private void PreTick()
     {
+        InputSystem.Instance.PreTick();
         foreach (Thing thing in things)
             thing.PreTick();
     }
@@ -198,6 +179,98 @@ public class ThingSystem : MonoBehaviour
                 path.Reverse();
 
                 return true;
+            }
+
+            closedList.TryAdd(pos, G);
+            openList.Remove(pos);
+
+            // 수평 및 수직 이동
+            foreach (Vector2Int direction in Directions)
+            {
+                Vector2Int neighborPos = new Vector2Int(pos.x + direction.x, pos.y + direction.y);
+                if (closedList.ContainsKey(neighborPos) || map.ContainsKey(neighborPos))
+                    continue;
+
+                float neighborG = G + 1;
+                if (openList.ContainsKey(neighborPos))
+                {
+                    if (openList[neighborPos] > neighborG)
+                    {
+                        openList[neighborPos] = neighborG;
+                        pre[neighborPos] = pos;
+                    }
+                }
+                else
+                {
+                    openList.Add(neighborPos, neighborG);
+                    pre.Add(neighborPos, pos);
+                }
+            }
+            // 대각선 이동
+            foreach (var direction in Directions2)
+            {
+                Vector2Int neighborPosA = pos + direction.Item1;
+                Vector2Int neighborPosB = pos + direction.Item2;
+                Vector2Int neighborPos = pos + direction.Item3;
+                if (closedList.ContainsKey(neighborPos) || map.ContainsKey(neighborPos) || map.ContainsKey(neighborPosA) || map.ContainsKey(neighborPosB))
+                    continue;
+
+                float neighborG = G + 1;
+                if (openList.ContainsKey(neighborPos))
+                {
+                    if (openList[neighborPos] > neighborG)
+                    {
+                        openList[neighborPos] = neighborG;
+                        pre[neighborPos] = pos;
+                    }
+                }
+                else
+                {
+                    openList.Add(neighborPos, neighborG);
+                    pre.Add(neighborPos, pos);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public bool PathFindNeighbor(Vector2Int from, Vector2Int to, out List<Vector2Int> path, float maxDist = 20f)
+    {
+        path = new();
+
+        Dictionary<Vector2Int, float> openList = new();
+        Dictionary<Vector2Int, float> closedList = new();
+        Dictionary<Vector2Int, Vector2Int> pre = new();
+
+        openList.Add(from, 0);
+
+        while (openList.Count > 0)
+        {
+            Vector2Int pos = openList.First().Key;
+            foreach (Vector2Int key in openList.Keys)
+                if (openList[pos] + Vector2Int.Distance(pos, to) > openList[key] + Vector2Int.Distance(key, to))
+                    pos = key;
+            float G = openList[pos];
+
+            if (G + Vector2Int.Distance(pos, to) > maxDist)
+                break;
+
+            foreach (Vector2Int direction in Directions)
+            {
+                if (pos + direction == to)
+                {
+                    Vector2Int cur = pos;
+                    while (cur != from)
+                    {
+                        path.Add(cur);
+                        cur = pre[cur];
+                    }
+                    path.Add(from);
+                    path.Reverse();
+
+                    return true;
+                }
             }
 
             closedList.TryAdd(pos, G);

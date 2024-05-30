@@ -28,9 +28,15 @@ public class BehaviorComp : ThingComp
 
         if (CurBehavior != null)
         {
-            if (!CurBehavior.Tick())
+            int result = CurBehavior.Tick();
+            if (result == 1)
             {
                 CurBehavior.OnFinish();
+                CurBehavior = null;
+            }
+            else if (result == 2)
+            {
+                CurBehavior.OnCancel();
                 CurBehavior = null;
             }
         }

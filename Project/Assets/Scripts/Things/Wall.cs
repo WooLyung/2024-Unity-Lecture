@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Wall : Thing
 {
-    public override string Name => "Thing";
+    public override string Name => "Wall";
 }

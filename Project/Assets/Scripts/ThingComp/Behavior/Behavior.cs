@@ -18,10 +18,12 @@ public abstract class Behavior
 
     public virtual void OnFinish() { }
 
-    public bool Tick() // false : end
+    public virtual void OnCancel() { }
+
+    public int Tick() // 1:finish, 2:cancel
     {
         if (steps.Count == 0)
-            return false;
+            return 1;
 
         if (CurStep == -1)
         {
@@ -32,7 +34,7 @@ public abstract class Behavior
             if (step.IsCanceled())
             {
                 step.OnCancel();
-                return false;
+                return 2;
             }
             else if (step.IsFinished())
             {
@@ -51,7 +53,7 @@ public abstract class Behavior
                 step.OnCancel();
                 CurStep = -1;
                 newSteps();
-                return true;
+                return 0;
             }
             else if (step.IsFinished())
             {
@@ -63,9 +65,9 @@ public abstract class Behavior
         }
 
         if (CurStep >= steps.Count)
-            return false;
+            return 1;
 
         steps[CurStep].Tick();
-        return true;
+        return 0;
     }
 }

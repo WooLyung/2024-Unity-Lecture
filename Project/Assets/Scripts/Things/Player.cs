@@ -15,6 +15,7 @@ public class Player : Entity
 
         AddComp(new HpComp(this));
         AddComp(new MoveComp(this, 10));
+        AddComp(new InvComp(this));
     }
 
     public override void OnStart()

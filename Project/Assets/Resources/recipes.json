@@ -1,0 +1,10 @@
+{
+    "datas":[
+        {
+            "input_items":[ "item_a", "item_b" ],
+            "input_amounts":[ 1, 1 ],
+            "output_items":[ "item_a" ],
+            "output_amounts":[ 2 ]
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+{
+    "datas":[
+        {
+            "name":"Test",
+            "id":"item_a",
+            "tags":[ "Fuel", "Material" ]
+        },
+        {
+            "name":"Test2",
+            "id":"item_b",
+            "tags":[ "Fuel", "Material" ]
+        }
+    ]
+}

@@ -18,6 +18,30 @@ public class ThingSystem : MonoBehaviour
         Instance = this;
     }
 
+    // Load Resources
+    void Awake()
+    {
+        TextAsset items = Resources.Load<TextAsset>("items");
+        ItemDataWrapper itemsWrapper = JsonUtility.FromJson<ItemDataWrapper>(items.text);
+        foreach (ItemDataJson data in itemsWrapper.datas)
+            Database<ItemData>.Load(new ItemData(data.name, data.id, data.tags));
+
+        TextAsset recipes = Resources.Load<TextAsset>("recipes");
+        RecipeDataWrapper recipesWrapper = JsonUtility.FromJson<RecipeDataWrapper>(recipes.text);
+        foreach (RecipeDataJson data in recipesWrapper.datas)
+        {
+            (string, int)[] inputs = new (string, int)[data.input_items.Count()];
+            (string, int)[] outputs = new (string, int)[data.output_items.Count()];
+
+            for (int i = 0; i < data.input_items.Count(); i++)
+                inputs[i] = (data.input_items[i], data.input_amounts[i]);
+            for (int i = 0; i < data.output_items.Count(); i++)
+                outputs[i] = (data.output_items[i], data.output_amounts[i]);
+
+            Database<RecipeData>.Load(new RecipeData(inputs, outputs));
+        }
+    }
+
     void Update()
     {
         tickTime += Time.deltaTime;

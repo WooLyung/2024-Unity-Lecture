@@ -22,7 +22,7 @@ public class Inventory
             found.amount += item.amount;
         else
             items.Add(item);
-        OnInventoryUpdate.Invoke(this);
+        OnInventoryUpdate?.Invoke(this);
     }
 
     public bool HasItem(Item item)
@@ -40,7 +40,7 @@ public class Inventory
 
         Item found = items.Find(item2 => item2.ItemData == item.ItemData);
         found.amount -= item.amount;
-        OnInventoryUpdate.Invoke(this);
+        OnInventoryUpdate?.Invoke(this);
         return true;
     }
 }

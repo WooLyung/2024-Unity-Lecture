@@ -58,4 +58,6 @@ public class InvComp : ThingComp
             }
         }
     }
+
+    public override string SavableName => "InvComp";
 }

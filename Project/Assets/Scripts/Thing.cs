@@ -3,10 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.PlasticSCM.Editor.WebApi;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public abstract class Thing : MonoBehaviour
+
+
+public abstract class Thing : MonoBehaviour, ISavable
 {
+    public string SavableName => "thing-{0}";
+
+    public string GetJSON()
+    {
+        return $"{{\"name\":\"{Name}\",\"x\":{Pos.x},\"y\":{Pos.y}}}";
+    }
+
+    public IEnumerable<ISavable> GetChilds()
+    {
+        foreach (var comp in comps)
+            yield return comp;
+    }
+
     protected List<ThingComp> comps = new List<ThingComp>();
 
     // Variables

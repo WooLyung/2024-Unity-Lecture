@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,4 +42,6 @@ public class BehaviorComp : ThingComp
             }
         }
     }
+
+    public override string SavableName => "BehaviorComp";
 }

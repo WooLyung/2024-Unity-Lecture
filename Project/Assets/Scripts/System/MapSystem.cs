@@ -13,7 +13,7 @@ public class MapSystem : MonoBehaviour
     public GameObject tree;
     public GameObject pig;
 
-    private int width = 100, height = 100;
+    private int width = 10, height = 10;
     private int seed = 114257;
 
     private int[,] map;

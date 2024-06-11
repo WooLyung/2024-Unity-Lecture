@@ -56,4 +56,5 @@ public class MoveComp : ThingComp
         Thing.Pos = to;
         Thing.transform.position = new Vector3(from.x, from.y);
     }
+    public override string SavableName => "MoveComp";
 }

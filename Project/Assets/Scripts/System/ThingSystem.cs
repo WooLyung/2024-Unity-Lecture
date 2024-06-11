@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ThingSystem : MonoBehaviour
+public class ThingSystem : MonoBehaviour, ISavable
 {
     public static ThingSystem Instance { get; private set; }
 
@@ -381,5 +381,18 @@ public class ThingSystem : MonoBehaviour
         if (tiles.Count == 0)
             return null;
         return tiles.ToList()[UnityEngine.Random.Range(0, tiles.Count)];
+    }
+
+    public string SavableName => "things";
+
+    public string GetJSON()
+    {
+        return null;
+    }
+
+    public IEnumerable<ISavable> GetChilds()
+    {
+        foreach (Thing thing in things)
+            yield return thing;
     }
 }

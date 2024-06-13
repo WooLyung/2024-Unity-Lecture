@@ -6,8 +6,6 @@ using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
 using UnityEngine;
 
-
-
 public abstract class Thing : MonoBehaviour, ISavable
 {
     public string SavableName => "thing-{0}";
